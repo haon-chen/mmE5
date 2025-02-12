@@ -8,6 +8,9 @@ if [ -z "$MODEL_NAME" ]; then
 #   MODEL_NAME="microsoft/Phi-3.5-vision-instruct"
     # MODEL_NAME="llava-hf/llava-v1.6-mistral-7b-hf"
 fi
+if [ -z "$PROCESSOR_NAME" ]; then
+  PROCESSOR_NAME="meta-llama/Llama-3.2-11B-Vision"
+fi
 if [ -z "$CKP_PATH" ]; then
     CKP_PATH="./checkpoint/ft_xxx/checkpoint-xxx"
 fi
@@ -25,15 +28,16 @@ if [ -z "$MODEL_BACKBONE" ]; then
 #   MODEL_BACKBONE="phi35v"
 #   MODEL_BACKBONE="llava_next"
 fi
-
 PYTHONPATH=src/ python eval_multi.py --lora \
   --model_name "${MODEL_NAME}" \
+  --processor_name "${PROCESSOR_NAME}" \
   --encode_output_path "${OUTPUT_DIR}" \
   --checkpoint_path "${CKP_PATH}" \
   --num_crops 4 --max_len 256 \
+  --dataloader_num_workers 4 \
   --pooling last --normalize True \
-  --dataset_path "/home/v-chenhaonan/multimodal/VLM2Vec/data/XTD-datasets" \
-  --subset_name ar_t2i de_t2i en_t2i es_t2i fr_t2i it_t2i jp_t2i ko_t2i pl_t2i ru_t2i tr_t2i zh_t2i \
+  --dataset_name "Haon-Chen/XTD-10" \
+  --subset_name es it ko pl ru tr zh \
   --dataset_split test --per_device_eval_batch_size ${BATCH_SIZE} \
   --image_dir "images/XTD10_dataset/" \
   --model_backbone "${MODEL_BACKBONE}" \

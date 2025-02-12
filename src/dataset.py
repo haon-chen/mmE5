@@ -6,7 +6,6 @@ from datasets import load_dataset, concatenate_datasets, load_from_disk
 from torch.utils.data import Dataset
 from PIL import Image
 import os
-from IPython import embed
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -18,8 +17,6 @@ class TrainDataset(Dataset):
         self.model_args = model_args
         self.negative_ratio = self.data_args.negative_ratio
         train_data = []
-        # embed()
-        # input()
         if self.data_args.synthetic_dataset_name or self.data_args.synthetic_dataset_path:
             print(f"Loading {len(data_args.synthetic_subset_name)} synthetic datasets: {data_args.synthetic_subset_name}")
             for subset in data_args.synthetic_subset_name:
@@ -73,12 +70,10 @@ class TrainDataset(Dataset):
         if img_path == "":
             return None
         full_img_path = os.path.join(self.data_args.image_dir, img_path)
-        if not os.path.exists(full_img_path):
-            full_img_path = os.path.join(self.data_args.laion_image_dir, img_path)
         image = Image.open(full_img_path)
         if 'Llama' in self.model_args.model_name or self.model_args.model_backbone == "mllama":
             if image.size[1] == 1:
-                print(f"Failed Image: {image}.")
+                # print(f"Failed Image: {image}.")
                 image = image.resize((image.size[0], 2))
         if self.model_args.model_backbone == "llava_next":
             # TODO: make it configurable

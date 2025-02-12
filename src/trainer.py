@@ -3,13 +3,6 @@ import torch.distributed as dist
 from typing import Optional
 import os
 import torch
-from itertools import repeat
-from grad_cache.grad_cache import GradCache
-from peft import set_peft_model_state_dict
-from transformers.trainer_utils import get_last_checkpoint
-
-MAX_INPUT_ID = int(1e9)
-LLAVE_IMAGE_TOKEN_ID = 32000
 
 class MMEBTrainer(Trainer):
     def __init__(self, *args, **kwargs):

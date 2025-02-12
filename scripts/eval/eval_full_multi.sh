@@ -3,48 +3,41 @@
 set -x
 set -e
 
-DIR="/home/v-chenhaonan/teamdrive"
-
-# MODEL_NAME_OR_PATH="TIGER-Lab/VLM2Vec-Full"
-# MODEL_NAME_OR_PATH="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
-# MODEL_NAME_OR_PATH="jinaai/jina-clip-v2"
-# MODEL_NAME_OR_PATH="nvidia/MM-Embed"
-MODEL_NAME_OR_PATH="TIGER-Lab/VLM2Vec-LLaVa-Next"
-if [[ $# -ge 1 && ! "$1" == "--"* ]]; then
-    MODEL_NAME_OR_PATH=$1
-    shift
+if [ -z "$MODEL_NAME" ]; then
+    MODEL_NAME="Haon-Chen/mmE5-11b-instruct"
+if [ -z "$PROCESSOR_NAME" ]; then
+  PROCESSOR_NAME="meta-llama/Llama-3.2-11B-Vision"
 fi
-
+if [ -z "$CKP_PATH" ]; then
+    CKP_PATH="./checkpoint/ft_xxx/checkpoint-xxx"
+fi
 if [ -z "$OUTPUT_DIR" ]; then
-#   OUTPUT_DIR="outputs/MM-Embed/"
-#   OUTPUT_DIR="outputs/jina/"
-  OUTPUT_DIR="outputs/VLM2Vec-LLaVa-Next1/"
+  OUTPUT_DIR="./outputs/multilingual"
 fi
 if [ -z "$DATA_DIR" ]; then
-  DATA_DIR="${DIR}/multimodal/data"
+  DATA_DIR="./data/"
 fi
-#   --dataset_path "${DATA_DIR}/MMEB-eval-datasets" \
-#   --subset_name ar_t2i de_t2i en_t2i es_t2i fr_t2i it_t2i jp_t2i ko_t2i pl_t2i ru_t2i tr_t2i zh_t2i \
-#   --subset_name en_t2i \
-
+if [ -z "$BATCH_SIZE" ]; then
+  BATCH_SIZE=16
+fi
 if [ -z "$MODEL_BACKBONE" ]; then
   MODEL_BACKBONE="mllama"
+#   MODEL_BACKBONE="phi35v"
+#   MODEL_BACKBONE="llava_next"
 fi
 
-MODEL_BACKBONE="llava_next"
-# MODEL_BACKBONE="mmembed"
-# MODEL_BACKBONE="jina"
-OUTPUT_DIR="$OUTPUT_DIR/multilingual/"
-
-PYTHONPATH=src/ python ./eval_multi.py --model_name "${MODEL_NAME_OR_PATH}" \
+PYTHONPATH=src/ python eval_multi.py --model_name "${MODEL_NAME}" \
+  --processor_name "${PROCESSOR_NAME}" \
   --encode_output_path "${OUTPUT_DIR}" \
-  --model_backbone "${MODEL_BACKBONE}" \
+  --checkpoint_path "${CKP_PATH}" \
   --num_crops 4 --max_len 256 \
+  --dataloader_num_workers 4 \
   --pooling last --normalize True \
-  --dataset_path "/home/v-chenhaonan/multimodal/VLM2Vec/data/XTD-datasets" \
-  --subset_name tr_t2i \
-  --dataset_split test --per_device_eval_batch_size 8 \
-  --image_dir "${DATA_DIR}/xtd_11/photos/XTD10_dataset/" \
+  --dataset_name "Haon-Chen/XTD-10" \
+  --subset_name es it ko pl ru tr zh \
+  --dataset_split test --per_device_eval_batch_size ${BATCH_SIZE} \
+  --image_dir "images/XTD10_dataset/" \
+  --model_backbone "${MODEL_BACKBONE}" \
 
 echo "done"
 

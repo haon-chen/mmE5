@@ -9,6 +9,9 @@ if [ -z "$MODEL_NAME" ]; then
 #   MODEL_NAME="microsoft/Phi-3.5-vision-instruct"
     # MODEL_NAME="llava-hf/llava-v1.6-mistral-7b-hf"
 fi
+if [ -z "$PROCESSOR_NAME" ]; then
+  PROCESSOR_NAME="meta-llama/Llama-3.2-11B-Vision"
+fi
 if [ -z "$CKP_PATH" ]; then
     CKP_PATH="./checkpoint/ft_xxx/checkpoint-xxx"
 fi
@@ -29,9 +32,11 @@ fi
 
 PYTHONPATH=src/ python eval.py --lora \
   --model_name "${MODEL_NAME}" \
+  --processor_name "${PROCESSOR_NAME}" \
   --checkpoint_path "${CKP_PATH}" \
   --encode_output_path "${OUTPUT_DIR}" \
   --num_crops 4 --max_len 256 \
+  --dataloader_num_workers 4 \
   --pooling last --normalize True \
   --dataloader_num_workers 4 \
   --dataset_name "TIGER-Lab/MMEB-eval" \
@@ -39,5 +44,3 @@ PYTHONPATH=src/ python eval.py --lora \
   --dataset_split test --per_device_eval_batch_size ${BATCH_SIZE} \
   --image_dir "images/eval_images/" \
   --model_backbone "${MODEL_BACKBONE}" \
-
-echo "done"

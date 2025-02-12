@@ -2,12 +2,10 @@
 
 This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore innovative methods for integrating high-quality synthetic data to boost the performance and robustness of multimodal multilingual embeddings across diverse tasks.
 
-<img width="1432" alt="mmE5 Overview" src="figures/teaser_mme5.png">
-
 [![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://github.com/haon-chen/mmE5)
 [![Code](https://img.shields.io/badge/-Code-green?style=flat&logo=github)](https://github.com/haon-chen/mmE5)
-[![Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://github.com/haon-chen/mmE5)
-[![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://github.com/haon-chen/mmE5)
+[![Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
+[![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-11b-instruct)
 ---
 
 ## Latest Updates
@@ -20,17 +18,17 @@ Multimodal embedding models have gained significant attention for their ability 
 
 ## Datasets
 Our experiments leverage a comprehensive dataset that combines real-world examples with synthetic data, covering a wide range of tasks and languages. We also provide the labeled training set of MMEB benchmark that includes mined hard negatives.
-- [Synthetic Dataset](https://github.com/haon-chen/mmE5)
-- [MMEB with Hard Negative](https://github.com/haon-chen/mmE5)
+- [Synthetic Dataset](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
+- [MMEB with Hard Negative](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg)
 
 ## Experimental Results
 mmE5 consistently outperforms existing methods in multimodal and multilingual tasks. Our experiments highlight significant gains in both accuracy and robustness.
 
-<img alt="Experimental Results" src="figures/experimental_results.png">
+<img alt="Experimental Results" src="figures/exp_result.jpg">
 
 ## Quick Start
 - Preparation
-Download images from [Synthetic Dataset](https://github.com/haon-chen/mmE5), [MMEB with Hard Negative](https://github.com/haon-chen/mmE5), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).
+Download images from [Synthetic Dataset](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic), [MMEB with Hard Negative](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).
 
 We have provided example scripts in the `scripts/` directory to help you get started with training and evaluation.
 - Train

@@ -5,8 +5,8 @@ from src.arguments import ModelArguments, DataArguments, TrainingArguments
 from transformers import HfArgumentParser, AutoProcessor
 
 from src.model import MMEBModel
-from src.dataset import EvalDataset, GMEEvalDataset
-from src.collator import EvalCollator, LlamaEvalCollator, MMEMBEDCollator, GMEMultiCollator, MMEMBEDMultiCollator
+from src.dataset import EvalDataset
+from src.collator import EvalCollator, LlamaEvalCollator
 from torch.utils.data import DataLoader
 import torch
 from tqdm import tqdm
@@ -16,7 +16,6 @@ import os
 from datasets import load_dataset, load_from_disk
 from evaluation.eval_utils import get_pred, precision_at_k, recall_at_k
 from src.vlm_backbone.llava_next.processing_llava_next import LlavaNextProcessor
-from IPython import embed
 
 xtd_10_data_group = ["it", "es", "ru", "zh", "pl", "tr", "ko"]
 
@@ -176,8 +175,7 @@ def main():
             eval_data = load_dataset(
                 data_args.dataset_name,
                 subset,
-                split=data_args.dataset_split,
-                download_mode="force_redownload"
+                split=data_args.dataset_split
             )
         elif data_args.dataset_path:
             subset_path = os.path.join(data_args.dataset_path, subset) 

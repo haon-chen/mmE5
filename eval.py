@@ -5,8 +5,8 @@ from src.arguments import ModelArguments, DataArguments, TrainingArguments
 from transformers import HfArgumentParser, AutoProcessor
 
 from src.model import MMEBModel
-from src.dataset import EvalDataset, GMEEvalDataset
-from src.collator import EvalCollator, LlamaEvalCollator, MMEMBEDCollator, GMECollator
+from src.dataset import EvalDataset
+from src.collator import EvalCollator, LlamaEvalCollator
 from torch.utils.data import DataLoader
 import torch
 from tqdm import tqdm
@@ -16,7 +16,6 @@ import os
 from datasets import load_dataset, load_from_disk
 from evaluation.eval_utils import get_pred
 from src.vlm_backbone.llava_next.processing_llava_next import LlavaNextProcessor
-from IPython import embed
 from src.vlm_backbone.phi3_v.processing_phi3_v import Phi3VProcessor
 
 data_group = {
@@ -83,7 +82,7 @@ def main():
         )
     else:
         processor = AutoProcessor.from_pretrained(
-            model_args.model_name,
+            model_args.processor_name if model_args.processor_name else model_args.model_name,
             trust_remote_code=True,
             num_crops=model_args.num_crops,
         )
@@ -165,8 +164,7 @@ def main():
             encoded_tensor = []
             with torch.no_grad():
                 for batch in tqdm(eval_qry_loader, desc="Encode query"):
-                    if model_args.model_backbone != "mmembed" and model_args.model_backbone != "gme":
-                        batch = {key: value.to(training_args.device) for key, value in batch.items()}
+                    batch = {key: value.to(training_args.device) for key, value in batch.items()}
                     with torch.autocast(enabled=True, dtype=torch.bfloat16, device_type="cuda"):
                         output = model(qry=batch)
                     encoded_tensor.append(output["qry_reps"].cpu().detach().float().numpy())
@@ -178,8 +176,7 @@ def main():
             encoded_tensor = []
             with torch.no_grad():
                 for batch in tqdm(eval_tgt_loader, desc="Encode target"):
-                    if model_args.model_backbone != "mmembed" and model_args.model_backbone != "gme":
-                        batch = {key: value.to(training_args.device) for key, value in batch.items()}
+                    batch = {key: value.to(training_args.device) for key, value in batch.items()}
                     output = model(tgt=batch)
                     encoded_tensor.append(output["tgt_reps"].cpu().detach().float().numpy())
             encoded_tensor = np.concatenate(encoded_tensor)
@@ -213,8 +210,7 @@ def main():
             eval_data = load_dataset(
                 data_args.dataset_name,
                 subset,
-                split=data_args.dataset_split,
-                download_mode="force_redownload"
+                split=data_args.dataset_split
             )
         elif data_args.dataset_path:
             subset_path = os.path.join(data_args.dataset_path, subset) 

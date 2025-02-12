@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from transformers import ProcessorMixin, AutoProcessor, AutoTokenizer
 from src.arguments import DataArguments, ModelArguments
 import torch
-from IPython import embed
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 

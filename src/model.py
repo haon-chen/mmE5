@@ -5,13 +5,10 @@ from torch import nn, Tensor
 from transformers import PreTrainedModel, AutoModelForCausalLM, AutoConfig, AutoModel, MllamaForConditionalGeneration, MllamaProcessor, LlavaNextForConditionalGeneration 
 from peft import LoraConfig, get_peft_model, PeftModel
 from src.arguments import ModelArguments, TrainingArguments
-from IPython import embed
 import copy
 from utils import place_tensors_on_diagonal
 from src.vlm_backbone.phi3_v.modeling_phi3_v import Phi3VForCausalLM
-from transformers import Qwen2VLForConditionalGeneration
 from src.vlm_backbone.llava_next import LlavaNextForConditionalGeneration
-from gme_inference import GmeQwen2VL
 
 def set_requires_grad(parameters, requires_grad):
     for p in parameters:
@@ -196,7 +193,7 @@ class MMEBModel(nn.Module):
                                                           torch_dtype=torch.bfloat16, trust_remote_code=True)
             base_model.padding_side = "right"
         elif model_args.model_backbone == "mllama":
-            base_model = model_type.from_pretrained(
+            base_model = MllamaForConditionalGeneration.from_pretrained(
                 checkpoint_path, **hf_kwargs, config=config, 
                 attn_implementation="sdpa",
                 torch_dtype=torch.bfloat16, 
