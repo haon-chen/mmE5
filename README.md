@@ -1,11 +1,10 @@
-# mmE5: Enhancing Multimodal Multilingual Embeddings with Superior Synthetic Data
+# mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data
 
 This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore integrating high-quality synthetic data to boost the performance of multimodal multilingual embeddings across diverse tasks.
 
 [![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://github.com/haon-chen/mmE5)
 [![Code](https://img.shields.io/badge/-Code-green?style=flat&logo=github)](https://github.com/haon-chen/mmE5)
 [![Synthetic Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
-[![MMEB Dataset with Hard Negative](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg)
 [![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-11b-instruct)
 ---
 
