@@ -1,10 +1,11 @@
 # mmE5: Enhancing Multimodal Multilingual Embeddings with Superior Synthetic Data
 
-This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore innovative methods for integrating high-quality synthetic data to boost the performance and robustness of multimodal multilingual embeddings across diverse tasks.
+This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore integrating high-quality synthetic data to boost the performance of multimodal multilingual embeddings across diverse tasks.
 
 [![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://github.com/haon-chen/mmE5)
 [![Code](https://img.shields.io/badge/-Code-green?style=flat&logo=github)](https://github.com/haon-chen/mmE5)
-[![Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
+[![Synthetic Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
+[![MMEB Dataset with Hard Negative](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg)
 [![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-11b-instruct)
 ---
 
@@ -22,12 +23,13 @@ Our experiments leverage a comprehensive dataset that combines real-world exampl
 - [MMEB with Hard Negative](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg)
 
 ## Experimental Results
-mmE5 consistently outperforms existing methods in multimodal and multilingual tasks. Our experiments highlight significant gains in both accuracy and robustness.
+mmE5 achieves SOTA performance on MMEB benchmark.
 
 <img alt="Experimental Results" src="figures/exp_result.jpg">
 
 ## Quick Start
 - Preparation
+
 Download images from [Synthetic Dataset](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic), [MMEB with Hard Negative](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).
 
 We have provided example scripts in the `scripts/` directory to help you get started with training and evaluation.
@@ -42,6 +44,11 @@ We have provided example scripts in the `scripts/` directory to help you get sta
 - Test XTD
 ```
 ./eval/eval_full_multi.sh
+```
+
+You can also use `demo.py` to embed your own text and images.
+```
+python demo.py
 ```
 
 ## Acknowledgement
