@@ -27,6 +27,11 @@ mmE5 achieves SOTA performance on MMEB benchmark.
 <img alt="Experimental Results" src="figures/exp_result.jpg">
 
 ## Quick Start
+
+```
+pip install -r requirements.txt
+```
+
 - Preparation
 
 Download images from [Synthetic Dataset](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic), [MMEB with Hard Negative](https://huggingface.co/datasets/Haon-Chen/mmE5-MMEB-hardneg), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).

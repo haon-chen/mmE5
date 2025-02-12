@@ -53,7 +53,7 @@ deepspeed --master_port 18271 train.py --deepspeed "${DS_CONFIG_PATH}" \
     --model_name "${MODEL_NAME_OR_PATH}" --bf16 --pooling last \
     --num_sample_per_subset 50000 \
     --dataloader_num_workers 4 \
-    --image_dir "${DATA_DIR}/MMEB-train" \
+    --image_dir "images/MMEB-train" \
     --gradient_checkpointing True --gradient_accumulation_steps 4 \
     --num_train_epochs 1 \
     --lora --lora_r 8 \
