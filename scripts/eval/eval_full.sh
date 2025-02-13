@@ -4,7 +4,7 @@ set -x
 set -e
 
 if [ -z "$MODEL_NAME" ]; then
-    MODEL_NAME="Haon-Chen/mmE5-11b-instruct"
+    MODEL_NAME="Haon-Chen/mmE5-mllama-11b-instruct"
 fi
 if [ -z "$PROCESSOR_NAME" ]; then
   PROCESSOR_NAME="meta-llama/Llama-3.2-11B-Vision"
