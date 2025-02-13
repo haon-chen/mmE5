@@ -2,7 +2,7 @@
 
 This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore integrating high-quality synthetic data to boost the performance of multimodal multilingual embeddings across diverse tasks.
 
-[![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://github.com/haon-chen/mmE5)
+[![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://arxiv.org/abs/2502.08468)
 [![Code](https://img.shields.io/badge/-Code-green?style=flat&logo=github)](https://github.com/haon-chen/mmE5)
 [![Synthetic Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
 [![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-11b-instruct)
@@ -61,5 +61,10 @@ python demo.py
 
 ## Citation
 ```
-
+@article{chen2025mmE5,
+  title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
+  author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
+  journal={arXiv preprint arXiv:2502.08468},
+  year={2025}
+}
 ```
