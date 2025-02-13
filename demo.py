@@ -7,7 +7,7 @@ from PIL import Image
 import numpy as np
 
 model_args = ModelArguments(
-    model_name='Haon-Chen/mmE5-private',
+    model_name='Haon-Chen/mmE5-mllama-11b-instruct',
     processor_name='meta-llama/Llama-3.2-11B-Vision',
     pooling='last',
     normalize=True,
