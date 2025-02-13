@@ -2,12 +2,11 @@ from src.model import MMEBModel
 from src.arguments import ModelArguments
 from src.utils import load_processor
 import torch
-from transformers import HfArgumentParser, AutoProcessor
 from PIL import Image
 import numpy as np
 
 model_args = ModelArguments(
-    model_name='Haon-Chen/mmE5-mllama-11b-instruct',
+    model_name='intfloat/mmE5-mllama-11b-instruct',
     processor_name='meta-llama/Llama-3.2-11B-Vision',
     pooling='last',
     normalize=True,
