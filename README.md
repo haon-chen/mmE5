@@ -5,7 +5,7 @@ This repository provides the source code, models, and datasets for our paper **m
 [![Paper](https://img.shields.io/badge/-Paper-black?style=flat&logo=arxiv)](https://arxiv.org/abs/2502.08468)
 [![Code](https://img.shields.io/badge/-Code-green?style=flat&logo=github)](https://github.com/haon-chen/mmE5)
 [![Synthetic Dataset](https://img.shields.io/badge/-Dataset-red?style=flat)](https://huggingface.co/datasets/Haon-Chen/mmE5-synthetic)
-[![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-MMEB-hardneg)
+[![Models](https://img.shields.io/badge/-Models-red?style=flat)](https://huggingface.co/Haon-Chen/mmE5-mllama-11b-instruct)
 ---
 
 ## Latest Updates
