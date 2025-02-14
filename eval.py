@@ -1,19 +1,19 @@
 import json
 import sys
+import pickle
+import os
+import torch
+import numpy as np
 
-from src.arguments import ModelArguments, DataArguments, TrainingArguments
+from tqdm import tqdm
+from datasets import load_dataset, load_from_disk
+from torch.utils.data import DataLoader
 from transformers import HfArgumentParser, AutoProcessor
 
+from src.arguments import ModelArguments, DataArguments, TrainingArguments
 from src.model import MMEBModel
 from src.dataset import EvalDataset
 from src.collator import EvalCollator, LlamaEvalCollator
-from torch.utils.data import DataLoader
-import torch
-from tqdm import tqdm
-import numpy as np
-import pickle
-import os
-from datasets import load_dataset, load_from_disk
 from evaluation.eval_utils import get_pred
 from src.vlm_backbone.llava_next.processing_llava_next import LlavaNextProcessor
 from src.vlm_backbone.phi3_v.processing_phi3_v import Phi3VProcessor
@@ -43,6 +43,7 @@ data_group_class = {
 }
 
 
+@torch.no_grad()
 def main():
     for arg in sys.argv:
         if arg.startswith("--local-rank="):
@@ -57,9 +58,9 @@ def main():
     training_args: TrainingArguments
 
     if model_args.checkpoint_path:
-        base_name = os.path.basename(model_args.checkpoint_path)  # get last part (checkpoint-800)
+        base_name = os.path.basename(model_args.checkpoint_path)
         if base_name.startswith("checkpoint"):
-            dir_name = os.path.basename(os.path.dirname(model_args.checkpoint_path)).split('-')[-1]  # 获取上一级部分 (c6687d4306a0)
+            dir_name = os.path.basename(os.path.dirname(model_args.checkpoint_path)).split('-')[-1]
         else:
             dir_name = os.path.basename(model_args.checkpoint_path).split('-')[-1]
         output_path = f"{data_args.encode_output_path}/{dir_name}/{base_name}/" if base_name.startswith("checkpoint") else f"{data_args.encode_output_path}/{dir_name}/"
@@ -67,8 +68,6 @@ def main():
         output_path = data_args.encode_output_path
 
     print(output_path)
-    # assert False
-
     os.makedirs(output_path, exist_ok=True)
 
     if model_args.model_backbone == "llava_next":
@@ -123,19 +122,14 @@ def main():
         if os.path.exists(encode_qry_path) and os.path.exists(encode_tgt_path):
             continue
 
-        if 'gme' in model_args.model_name or 'MM-Embed' in model_args.model_name:
-            dataset_func = GMEEvalDataset
-        else:
-            dataset_func = EvalDataset
-        
-        eval_qry_dataset = dataset_func(
+        eval_qry_dataset = EvalDataset(
             data_args=data_args,
             model_args=model_args,
             subset=subset,
             text_field="qry_text",
             img_path_field="qry_img_path",
         )
-        eval_tgt_dataset = dataset_func(
+        eval_tgt_dataset = EvalDataset(
             data_args=data_args,
             model_args=model_args,
             subset=subset,

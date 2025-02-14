@@ -39,15 +39,15 @@ Download images from [Synthetic Dataset](https://huggingface.co/datasets/intfloa
 We have provided example scripts in the `scripts/` directory to help you get started with training and evaluation.
 - Train
 ```
-./train/train.sh
+bash scripts/train/train.sh
 ```
 - Test MMEB
 ```
-./eval/eval_full.sh
+bash scripts/eval/eval_full.sh
 ```
 - Test XTD
 ```
-./eval/eval_full_multi.sh
+bash scripts/eval/eval_full_multi.sh
 ```
 
 You can also use `demo.py` to embed your own text and images.

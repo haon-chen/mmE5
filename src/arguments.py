@@ -25,7 +25,7 @@ class ModelArguments:
         metadata={"help": "pooling method for encoder"}
     )
     normalize: bool = field(
-        default=False,
+        default=True,
         metadata={"help": "normalize query and passage representations"}
     )
     temperature: float = field(
@@ -52,7 +52,7 @@ class ModelArguments:
         metadata={"help": "lora target modules"}
     )
     num_crops: int = field(
-        default=16,
+        default=4,
         metadata={"help": "number of crops used in image encoder"}
     )
 
@@ -121,12 +121,6 @@ class TrainingArguments(TrainingArguments):
     num_train_epochs: int = field(
         default=1, metadata={"help": "number of training epochs"}
     )
-    grad_cache: bool = field(
-        default=False, metadata={"help": "Use gradient cache update"})
-    gc_q_chunk_size: int = field(
-        default=2, metadata={"help": "query side subset size"})
-    gc_p_chunk_size: int = field(
-        default=2, metadata={"help": "target side subset size"})
     resume_from_checkpoint: str = field(
         default=None, metadata={"help": "resume training from checkpoint"})
     

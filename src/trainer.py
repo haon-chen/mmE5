@@ -1,8 +1,10 @@
-from transformers.trainer import Trainer, TRAINING_ARGS_NAME
-import torch.distributed as dist
-from typing import Optional
 import os
 import torch
+import torch.distributed as dist
+
+from transformers.trainer import Trainer, TRAINING_ARGS_NAME
+from typing import Optional
+
 
 class MMEBTrainer(Trainer):
     def __init__(self, *args, **kwargs):

@@ -33,9 +33,9 @@ def main():
     training_args: TrainingArguments
 
     if model_args.checkpoint_path:
-        base_name = os.path.basename(model_args.checkpoint_path)  # get last part (checkpoint-800)
+        base_name = os.path.basename(model_args.checkpoint_path)
         if base_name.startswith("checkpoint"):
-            dir_name = os.path.basename(os.path.dirname(model_args.checkpoint_path)).split('-')[-1]  # 获取上一级部分 (c6687d4306a0)
+            dir_name = os.path.basename(os.path.dirname(model_args.checkpoint_path)).split('-')[-1]
         else:
             dir_name = os.path.basename(model_args.checkpoint_path).split('-')[-1]
         output_path = f"{data_args.encode_output_path}/{dir_name}/{base_name}/" if base_name.startswith("checkpoint") else f"{data_args.encode_output_path}/{dir_name}/"
@@ -43,7 +43,6 @@ def main():
         output_path = data_args.encode_output_path
 
     print(output_path)
-
     os.makedirs(output_path, exist_ok=True)
 
     if model_args.model_backbone == "llava_next":

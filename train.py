@@ -5,21 +5,15 @@ import os
 import warnings
 warnings.simplefilter("ignore", category=FutureWarning)
 
-from transformers import AutoTokenizer, AutoProcessor
-from transformers import (
-    HfArgumentParser,
-)
-import torch.distributed as dist
+from transformers import AutoProcessor, HfArgumentParser
+from transformers.trainer_utils import get_last_checkpoint
 
 from src.dataset import TrainDataset
 from src.collator import TrainCollator, LlamaCollator
 from src.arguments import ModelArguments, DataArguments, TrainingArguments
 from src.model import MMEBModel
 from src.trainer import MMEBTrainer
-import torch
-import torch.distributed as dist
 from src.vlm_backbone.llava_next.processing_llava_next import LlavaNextProcessor
-from transformers.trainer_utils import get_last_checkpoint
 from src.vlm_backbone.phi3_v.processing_phi3_v import Phi3VProcessor
 
 logger = logging.getLogger(__name__)
@@ -73,9 +67,7 @@ def main():
         collator = TrainCollator(data_args, model_args, processor)
 
     model = MMEBModel.build(model_args, training_args)
-
-    trainer_cls = GradCacheTrainer if training_args.grad_cache else MMEBTrainer
-    trainer = trainer_cls(
+    trainer = MMEBTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
@@ -87,7 +79,6 @@ def main():
     total_params = sum(p.numel() for p in trainer.model.parameters())
     print(f"Total Parameters: {total_params}")
     print(f"Trainable Parameters: {trainable_params}")
-
 
     if training_args.resume_from_checkpoint is not None:
         if os.path.exists(training_args.resume_from_checkpoint):

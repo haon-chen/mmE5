@@ -3,11 +3,9 @@ from src.arguments import ModelArguments
 from src.utils import load_processor
 import torch
 from PIL import Image
-import numpy as np
 
 model_args = ModelArguments(
     model_name='intfloat/mmE5-mllama-11b-instruct',
-    processor_name='meta-llama/Llama-3.2-11B-Vision',
     pooling='last',
     normalize=True,
     model_backbone='mllama')

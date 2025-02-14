@@ -20,14 +20,6 @@ if [ -z "$DATA_DIR" ]; then
 fi
 
 DS_CONFIG_PATH="ds_config.json"
-if [ "$(nvidia-smi --list-gpus | wc -l)" = "1" ]; then
-  DS_CONFIG_PATH="ds_config.json"
-fi
-
-PROC_PER_NODE=$(nvidia-smi --list-gpus | wc -l)
-if [ "$PROC_PER_NODE" != "1" ] && [ "$RANK" != "0" ]; then
-  exit 0
-fi
 
 if [ -z "$BATCH_SIZE" ]; then
   BATCH_SIZE=4
@@ -57,7 +49,7 @@ deepspeed --master_port 18271 train.py --deepspeed "${DS_CONFIG_PATH}" \
     --gradient_checkpointing True --gradient_accumulation_steps 4 \
     --num_train_epochs 1 \
     --lora --lora_r 8 \
-    --max_len 256 --num_crops 4 --output_dir "${OUTPUT_DIR}" --logging_steps 5 \
+    --max_len 256 --output_dir "${OUTPUT_DIR}" --logging_steps 5 \
     --lr_scheduler_type linear --learning_rate 1e-5 --max_grad_norm 5.0 \
     --warmup_ratio 0.05 --save_steps 100 --save_total_limit 3 --normalize True \
     --temperature 0.02 --per_device_train_batch_size ${BATCH_SIZE} \

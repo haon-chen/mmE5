@@ -1,12 +1,12 @@
+import os
 import random
-from typing import List, Tuple
-from itertools import islice
 import datasets
+
+from typing import List, Tuple
 from datasets import load_dataset, concatenate_datasets, load_from_disk
 from torch.utils.data import Dataset
-from PIL import Image
-import os
-from PIL import ImageFile
+from PIL import Image, ImageFile
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 Phi_Image_token = "<|image_1|>"
@@ -176,8 +176,6 @@ class EvalDataset(Dataset):
             return self._process_image(image, "high")
         else:
             return image
-        
-        return image
 
     def get_paired_data(self, text_field, img_path_field):
         """

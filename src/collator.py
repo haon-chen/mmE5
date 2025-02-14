@@ -1,10 +1,13 @@
 import logging
-from typing import List, Tuple
-from dataclasses import dataclass
-from transformers import ProcessorMixin, AutoProcessor, AutoTokenizer
-from src.arguments import DataArguments, ModelArguments
 import torch
+
 from PIL import ImageFile
+from typing import List
+from dataclasses import dataclass
+from transformers import ProcessorMixin
+
+from src.arguments import DataArguments, ModelArguments
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 logger = logging.getLogger(__name__)
@@ -25,7 +28,7 @@ class TrainCollator:
 
         return qry_inputs, pos_inputs, neg_inputs
     
-    def _process_sigle_data(self, text, image, input_ids, pixel_values, image_sizes, has_image, image_exist):
+    def _process_single_data(self, text, image, input_ids, pixel_values, image_sizes, has_image, image_exist):
         if image is None:
             if self.model_args.model_backbone == "llava_next":
                 inputs = self.processor(images=None, text=text, return_tensors="pt")
@@ -39,10 +42,7 @@ class TrainCollator:
             if self.model_args.model_backbone == "llava_next":
                 pixel_values.append(None)
                 image_sizes.append(None)
-            if not image_exist:
-                return False
-            else:
-                return image_exist
+            return image_exist
         else:
             if self.model_args.model_backbone == "llava_next":
                 inputs = self.processor(images=image, text=text, return_tensors="pt")
@@ -61,9 +61,9 @@ class TrainCollator:
             text, image = example[text_idx], example[image_idx]
             if isinstance(image, List):
                 for t, img in zip(text, image):
-                    image_exist = self._process_sigle_data(t, img, input_ids, pixel_values, image_sizes, has_image, image_exist)
+                    image_exist = self._process_single_data(t, img, input_ids, pixel_values, image_sizes, has_image, image_exist)
             else:
-                image_exist = self._process_sigle_data(text, image, input_ids, pixel_values, image_sizes, has_image, image_exist)
+                image_exist = self._process_single_data(text, image, input_ids, pixel_values, image_sizes, has_image, image_exist)
         if len(input_ids)==0:
             return None
         input_ids = torch._C._nn.pad_sequence(
@@ -171,8 +171,7 @@ def first_non_int_element(lst):
             return element
     return None
 
-def convert_zero_tensor(tensor_list, batch_size, need_zero=False, seq_len=None):
-    
+def convert_zero_tensor(tensor_list, need_zero=False, seq_len=None):
     if not tensor_list:
         raise ValueError("The tensor_list is empty. Cannot infer tensor properties.")
     
@@ -256,15 +255,13 @@ class LlamaCollator:
         if len(input_ids)==0:
             return None
         if image_exist:
-            batch_size = len(input_ids)
-            
             for ind, input_id in enumerate(input_ids):
                 if not isinstance(pixel_values[ind], int):
                     continue
-                pixel_values[ind] = convert_zero_tensor(pixel_values, batch_size)
-                aspect_ratio_ids[ind] = convert_zero_tensor(aspect_ratio_ids, batch_size)
-                aspect_ratio_mask[ind] = convert_zero_tensor(aspect_ratio_mask, batch_size, need_zero=True)
-                batch_cross_attention_mask[ind] = convert_zero_tensor(batch_cross_attention_mask, batch_size, need_zero=True, seq_len=input_id.shape[0])
+                pixel_values[ind] = convert_zero_tensor(pixel_values)
+                aspect_ratio_ids[ind] = convert_zero_tensor(aspect_ratio_ids)
+                aspect_ratio_mask[ind] = convert_zero_tensor(aspect_ratio_mask, need_zero=True)
+                batch_cross_attention_mask[ind] = convert_zero_tensor(batch_cross_attention_mask, need_zero=True, seq_len=input_id.shape[0])
 
         input_ids = torch._C._nn.pad_sequence(
             input_ids, batch_first=True, padding_value=self.processor.tokenizer.pad_token_id

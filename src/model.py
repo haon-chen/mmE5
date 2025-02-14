@@ -1,31 +1,15 @@
-from typing import Dict, Optional
 import torch
 import torch.distributed as dist
+
+from typing import Dict, Optional
 from torch import nn, Tensor
-from transformers import PreTrainedModel, AutoModelForCausalLM, AutoConfig, AutoModel, MllamaForConditionalGeneration, MllamaProcessor, LlavaNextForConditionalGeneration 
+from transformers import PreTrainedModel, AutoConfig, MllamaForConditionalGeneration, LlavaNextForConditionalGeneration
 from peft import LoraConfig, get_peft_model, PeftModel
+
 from src.arguments import ModelArguments, TrainingArguments
-import copy
-from utils import place_tensors_on_diagonal
 from src.vlm_backbone.phi3_v.modeling_phi3_v import Phi3VForCausalLM
 from src.vlm_backbone.llava_next import LlavaNextForConditionalGeneration
 
-def set_requires_grad(parameters, requires_grad):
-    for p in parameters:
-        p.requires_grad = requires_grad
-
-def configure_vision_tower(model, training_args, compute_dtype, device):
-    vision_tower = model.vision_model
-    vision_tower.to(dtype=compute_dtype, device=device)
-
-    img_projection_params = model.multi_modal_projector.parameters()
-    set_requires_grad(img_projection_params, training_args.tune_img_projector)
-
-    vision_model_params = vision_tower.parameters()
-    set_requires_grad(vision_model_params, not training_args.freeze_vision_tower)
-
-    if training_args.bits in [4, 8]:
-        model.multi_modal_projector.to(dtype=compute_dtype, device=device)
 
 class MMEBModel(nn.Module):
     TRANSFORMER_CLS = {
@@ -83,14 +67,12 @@ class MMEBModel(nn.Module):
         if self.training_args.bf16:
             self.encoder.base_model.model.gradient_checkpointing_enable(gradient_checkpointing_kwargs)
         else:
-            self.encoder.base_model.model.gradient_checkpointing_enable()
+            self.encoder.base_model.model.gradient_checkpointing_enable(gradient_checkpointing_kwargs)
 
     @classmethod
     def build(cls, model_args: ModelArguments, training_args: TrainingArguments, **hf_kwargs):
         # Loading the base model
-        force_download = True
-        if dist.get_world_size() == 1:
-            force_download = False
+        force_download = dist.get_world_size() != 1
         config = AutoConfig.from_pretrained(model_args.model_name, trust_remote_code=True, force_download=force_download)
         if hasattr(config, 'use_cache'):
             config.use_cache = False
@@ -245,7 +227,6 @@ class MMEBModel(nn.Module):
         pos_scores = pos_scores.view(all_qry_reps.size(0), -1)
         scores = pos_scores.clone()
 
-        neg_ratio = 0
         batch_size = len(all_qry_reps)
         if neg is not None:
             neg_ratio = int(all_neg_reps.shape[0] / all_qry_reps.shape[0])
@@ -265,7 +246,6 @@ class MMEBModel(nn.Module):
         all_tensors[self.process_rank] = t
         all_tensors = torch.cat(all_tensors, dim=0)
         return all_tensors
-    
 
     def compute_similarity(self, q_reps, p_reps):
         return torch.matmul(q_reps, p_reps.transpose(0, 1))
