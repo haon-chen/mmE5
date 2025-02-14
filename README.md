@@ -1,4 +1,4 @@
-# mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data
+# [mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data](https://arxiv.org/abs/2502.08468)
 
 This repository provides the source code, models, and datasets for our paper **mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data**. In our work, we explore integrating high-quality synthetic data to boost the performance of multimodal multilingual embeddings across diverse tasks.
 
