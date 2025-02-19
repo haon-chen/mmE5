@@ -22,7 +22,7 @@ fi
 DS_CONFIG_PATH="ds_config.json"
 
 if [ -z "$BATCH_SIZE" ]; then
-  BATCH_SIZE=4
+  BATCH_SIZE=2
 fi
 
 if [ -z "$MODEL_BACKBONE" ]; then
@@ -45,8 +45,8 @@ deepspeed --master_port 18271 train.py --deepspeed "${DS_CONFIG_PATH}" \
     --model_name "${MODEL_NAME_OR_PATH}" --bf16 --pooling last \
     --num_sample_per_subset 50000 \
     --dataloader_num_workers 4 \
-    --image_dir "images/MMEB-train" \
-    --gradient_checkpointing True --gradient_accumulation_steps 4 \
+    --image_dir "./" \
+    --gradient_checkpointing True --gradient_accumulation_steps 8 \
     --num_train_epochs 1 \
     --lora --lora_r 8 \
     --max_len 256 --output_dir "${OUTPUT_DIR}" --logging_steps 5 \
@@ -56,5 +56,5 @@ deepspeed --master_port 18271 train.py --deepspeed "${DS_CONFIG_PATH}" \
     --model_backbone "${MODEL_BACKBONE}" \
     --processor_name "${PROCESSOR_NAME}" \
     --resume_from_checkpoint "${OUTPUT_DIR}" \
-    --negative_ratio 2 \
+    --negative_ratio 3 \
     --report_to none "$@"

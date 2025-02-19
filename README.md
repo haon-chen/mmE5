@@ -34,7 +34,11 @@ pip install -r requirements.txt
 
 - Preparation
 
-Download images from [Synthetic Dataset](https://huggingface.co/datasets/intfloat/mmE5-synthetic), [MMEB with Hard Negative](https://huggingface.co/datasets/intfloat/mmE5-MMEB-hardneg), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).
+```
+bash scripts/prepare_images.sh
+```
+
+This script will download images from [Synthetic Dataset](https://huggingface.co/datasets/intfloat/mmE5-synthetic), [MMEB with Hard Negative](https://huggingface.co/datasets/intfloat/mmE5-MMEB-hardneg), [MMEB-eval](https://huggingface.co/datasets/TIGER-Lab/MMEB-eval), and [XTD](https://huggingface.co/datasets/Haon-Chen/XTD-10).
 
 We have provided example scripts in the `scripts/` directory to help you get started with training and evaluation.
 - Train
