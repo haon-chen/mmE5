@@ -1,7 +1,6 @@
 from transformers import MllamaForConditionalGeneration, AutoProcessor, AutoConfig
 import torch
 from PIL import Image
-from IPython import embed
 
 # Pooling and Normalization
 def last_pooling(last_hidden_state, attention_mask, normalize=True):
