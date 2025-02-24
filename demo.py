@@ -18,17 +18,11 @@ model_name = "intfloat/mmE5-mllama-11b-instruct"
 
 # Load Processor and Model
 processor = AutoProcessor.from_pretrained(model_name)
-processor.tokenizer.padding_side = "right"
-
 config = AutoConfig.from_pretrained(model_name)
-if hasattr(config, 'use_cache'):
-    config.use_cache = False
-config.padding_side = "right"
 model = MllamaForConditionalGeneration.from_pretrained(
     model_name, config=config, 
     torch_dtype=torch.bfloat16
 ).to("cuda")
-model.padding_side = "right"
 model.eval()
 
 # Image + Text -> Text
