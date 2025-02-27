@@ -26,7 +26,7 @@ model = MllamaForConditionalGeneration.from_pretrained(
 model.eval()
 
 # Image + Text -> Text
-inputs = processor(text='<|image|><|begin_of_text|>Represent the given image with the following question: What is in the image', images=[Image.open(
+inputs = processor(text='<|image|><|begin_of_text|>Represent the given image with the following question: What is in the image\n', images=[Image.open(
     'figures/example.jpg')], return_tensors="pt").to("cuda")
 qry_output = last_pooling(model(**inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], inputs['attention_mask'])
 
@@ -34,29 +34,29 @@ string = 'A cat and a dog'
 text_inputs = processor(text=string, return_tensors="pt").to("cuda")
 tgt_output = last_pooling(model(**text_inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], text_inputs['attention_mask'])
 print(string, '=', compute_similarity(qry_output, tgt_output))
-## A cat and a dog = tensor([[0.3945]], device='cuda:0', dtype=torch.bfloat16)
+## A cat and a dog = tensor([[0.4219]], device='cuda:0', dtype=torch.bfloat16)
 
 string = 'A cat and a tiger'
 text_inputs = processor(text=string, return_tensors="pt").to("cuda")
 tgt_output = last_pooling(model(**text_inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], text_inputs['attention_mask'])
 print(string, '=', compute_similarity(qry_output, tgt_output))
-## A cat and a tiger = tensor([[0.3105]], device='cuda:0', dtype=torch.bfloat16)
+## A cat and a tiger = tensor([[0.3184]], device='cuda:0', dtype=torch.bfloat16)
 
 # Text -> Image
-inputs = processor(text='Find me an everyday image that matches the given caption: A cat and a dog.', return_tensors="pt").to("cuda")
+inputs = processor(text='Find me an everyday image that matches the given caption: A cat and a dog.\n', return_tensors="pt").to("cuda")
 qry_output = last_pooling(model(**inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], inputs['attention_mask'])
 
-string = '<|image|><|begin_of_text|>Represent the given image.'
+string = '<|image|><|begin_of_text|>Represent the given image.\n'
 tgt_inputs = processor(text=string, images=[Image.open('figures/example.jpg')], return_tensors="pt").to("cuda")
 tgt_output = last_pooling(model(**tgt_inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], tgt_inputs['attention_mask'])
 print(string, '=', compute_similarity(qry_output, tgt_output))
-## <|image|><|begin_of_text|>Represent the given image. = tensor([[0.4141]], device='cuda:0', dtype=torch.bfloat16)
+## <|image|><|begin_of_text|>Represent the given image. = tensor([[0.4414]], device='cuda:0', dtype=torch.bfloat16)
 
-inputs = processor(text='Find me an everyday image that matches the given caption: A cat and a tiger.', return_tensors="pt").to("cuda")
+inputs = processor(text='Find me an everyday image that matches the given caption: A cat and a tiger.\n', return_tensors="pt").to("cuda")
 qry_output = last_pooling(model(**inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], inputs['attention_mask'])
 
-string = '<|image|><|begin_of_text|>Represent the given image.'
+string = '<|image|><|begin_of_text|>Represent the given image.\n'
 tgt_inputs = processor(text=string, images=[Image.open('figures/example.jpg')], return_tensors="pt").to("cuda")
 tgt_output = last_pooling(model(**tgt_inputs, return_dict=True, output_hidden_states=True).hidden_states[-1], tgt_inputs['attention_mask'])
 print(string, '=', compute_similarity(qry_output, tgt_output))
-## <|image|><|begin_of_text|>Represent the given image. = tensor([[0.3770]], device='cuda:0', dtype=torch.bfloat16)
+## <|image|><|begin_of_text|>Represent the given image. = tensor([[0.3730]], device='cuda:0', dtype=torch.bfloat16)
